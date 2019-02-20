@@ -1,0 +1,514 @@
+<!DOCTYPE html>
+{% load static %}
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta name="keywords" content="python,lcy的个人博客">
+    <meta name="description" content="lcy的个人博客,记录学习过程和发表心得感悟">
+    <meta name="author" content="lcy">
+    <meta http-equiv="X-UA-Compatible" content="ie=edge">
+    <title>lcy's blog</title>
+
+    <link rel="stylesheet" href="{% static 'Blog/bootstrap/css/bootstrap.css' %}" />
+    <!-- <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/css/bootstrap.min.css" integrity="sha384-BVYiiSIFeK1dGmJRAkycuHAHRg32OmUcww7on3RYdg4Va+PmSTsz/K68vbdEjh4u" crossorigin="anonymous">
+    <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/css/bootstrap-theme.min.css" integrity="sha384-rHyoN1iRsVXV4nD0JutlnGaslCJuC7uwjduW9SVrLvRYooPp2bWYgmgJQIXwl/Sp" crossorigin="anonymous">
+    <script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/js/bootstrap.min.js" integrity="sha384-Tc5IQib027qvyjSMfHjOMaLkfuWVxZxUPnCJA7l2mCWNIpG9mGCD8wGNIcPD7Txa" crossorigin="anonymous"></script> -->
+    <!-- <script src="https://code.jquery.com/jquery-3.3.1.js"
+            integrity="sha256-2Kok7MbOyxpgUVvAk/HJ2jigOSYS2auK4Pfzbm7uH60="
+            crossorigin="anonymous"></script> -->
+    
+    <style>
+        body {
+            line-height:24px;
+            margin:0;
+            padding: 0;
+            background-color: #f2f2f2;
+            font-family: OpenSans-Light, PingFang SC, Hiragino Sans GB,
+                    Microsoft Yahei, Microsoft Jhenghei, sans-serif;
+        }
+        .blog_header {
+            display: block;
+            background-color: rgba(255,255,255,0.8);
+            box-shadow: 3px 3px 5px #ccc;
+            background-size: 100% 100%;
+            width:100%;
+            height:70px;
+            position: fixed;
+            z-index: 10;
+            margin: 0;
+            padding:0;
+        }
+        header .top {
+            width:100%;
+            max-width: 1200px;
+            margin:auto;
+            height:100%;
+            position:relative;
+        }
+        header .top .top_left {
+            width:40%;
+            overflow: hidden;
+            height:100%;
+            float:left;
+            position: relative;
+        }
+        header .top .top_left span {
+            line-height: 70px;
+            font-size:28px;
+            font-family: serif;
+        }
+        .header_nav {
+            width:60%;
+            float:right;
+            height:100%;
+            position:relative;
+            color:#555;
+        }
+        .header_nav > ul {
+            padding:0;
+            margin:0;
+            list-style: none;
+        }
+        .header_nav > ul >li {
+            text-align: center;
+            width:13%;
+            font-size:18px;
+            float:left;
+            position: relative;
+        }
+        .header_nav li > a {
+            display: inline-block;
+            width:100%;
+            height:70px;
+            line-height: 70px;
+            text-decoration: none;
+            color:#555;
+            cursor: pointer;
+            transition: color 0.2s, border 0.2s, font 0.2s;
+            -webkit-transition: color 0.2s, border 0.2s, font 0.2s;
+        }
+        .nav_active,header li > a:hover {
+            border-bottom-color:rgb(255, 102, 0);
+            border-bottom-style:solid;
+            border-bottom-width:3.6px;
+            box-sizing: border-box;
+            color:rgb(255, 102, 0) !important;
+            font-size: 120%;
+        }
+        header li > a:hover {
+            font-size: 120%;
+            color:rgb(255, 102, 0);
+        }
+
+        .container {
+            display: block;
+            width:100%;
+            max-width:1300px;
+            min-width:320px;
+            margin:auto;
+            padding-top:100px;
+            overflow: hidden;
+        }
+        .article {
+            width:65%;
+            display:block;
+            float:left;
+            margin-top:25px;
+            overflow: hidden;
+        }
+        .article ul:first-child {
+            width:100%;
+            padding: 0;
+            margin: 0;
+            list-style: none;
+        }
+        .article ul:first-child > li:hover {
+            border-color:#66afe9;
+            outline: 0;
+
+            -webkit-box-shadow: inset 0 1px 1px rgba(0,0,0,.075),0 0 8px rgba(102,175,233,.6);
+            box-shadow: inset 0 1px 1px rgba(0,0,0,.075),0 0 8px rgba(102,175,233,.6);
+        }
+        .article ul:first-child > li {
+            background-color: #fff;
+            border: 1px solid #ddd;
+            padding:25px;
+            margin:auto;
+            margin-bottom: 25px;
+            box-sizing: border-box;
+        }
+        .article_info {
+            padding-bottom: 10px;
+        }
+        .article_info ul {
+            list-style: none;
+        }
+        .article_title {
+            font-size: 25px;
+            line-height: 32px;
+            margin:0;
+            padding-bottom: 3px;
+            color:#333;
+            text-overflow: ellipsis;
+            overflow: hidden;
+            white-space: nowrap;   /*规定段落文本不换行*/
+        }
+        .article_title a {
+            font-size: 25px;
+            line-height: 32px;
+            margin-bottom:2px;
+            color:#333;
+            font-weight:500;
+            cursor: pointer;
+            text-overflow: ellipsis;
+            overflow: hidden;
+            white-space: nowrap;   /*规定段落文本不换行*/
+        }
+        .article_info p{
+            width:80%;
+            font-family:'Courier New', Courier, monospace;
+            text-indent:32px;
+            border-left:5px solid #666;
+            padding-left:5px;
+             /*
+            height:50px;
+            white-space: nowrap; */
+
+            /* 固定的宽度，强制不换行，超出隐藏，显示省略号,注释部分仅支持Chorme */
+            /* overflow: hidden;
+            text-overflow: ellipsis;
+            display: -webkit-box;
+            -webkit-line-clamp: 2;
+            -webkit-box-orient: vertical; */
+            height: 5.4em;
+            font-size: 16px;
+            color: #999;
+            line-height: 1.8em;
+            overflow: hidden;
+            position: relative;
+        } 
+        .article_info p:after {
+            /* 
+            为了实现仅显示两行文本，超出部分显示省略号。
+            给p元素上面添加了一个伪类，并且让这个伪类采用绝对定位，
+            定位至文本结尾处，超过的部分可以使用overflow:hidden隐藏。
+            并且结果部分用一个渐变效果遮盖，可以兼容FireFox和Chorme。 */
+            content: '...';
+            text-align: right;
+            position: absolute;
+            bottom: 0;
+            right: 0;
+            width: 10%;
+            height: 1.8em;
+            background: linear-gradient(to right, rgba(255, 255, 255, 0), rgba(255, 255, 255, 1) 50%);
+        }
+        .readmore{
+            text-decoration: none;
+            cursor:pointer;
+            width:15%;
+            float: right;
+            font-size: 15px;
+            color:cornflowerblue;
+        }
+        .article_info ul > li {
+            border:none;
+            float:left;
+            padding:0;
+            margin:0;
+            margin-right:20px;
+            font-size:15px;
+            overflow: hidden;
+            text-overflow: ellipsis;
+            white-space: nowrap;
+            color:#555;
+        }
+        .article_info ul > li > img {
+            width:20px;
+            height:20px;
+        }
+
+        #aside {
+            width:32%;
+            display:block;
+            float:right;
+            margin-top:25px;
+        }
+        #contactme {
+            background-color: #fff;
+            border:1px solid #ddd;
+            box-sizing: border-box;
+            margin-bottom: 50px;
+        }
+        .contact div {
+            background-color: #fff;
+            display: inline-block;
+            overflow: hidden;
+            width:25%;
+            text-align: center;
+            padding-top: 10px;
+            margin-bottom: 20px;
+        }
+        .contact a{
+            cursor:pointer;
+            text-decoration: none;
+        }
+        .contact img {
+            width: 50px;
+            height:50px;
+        }
+        .contact div > span {
+            display: block;
+            margin-top:5px;
+            width:100%;
+        }
+
+        #latestcomment {
+            background-color: #fff;
+            border:1px solid #ddd;
+            box-sizing: border-box;
+            margin-bottom: 50px;
+        }
+        #latestcomment ul {
+            width:100%;
+            padding: 0;
+            margin: 0;
+            list-style: none;
+        }
+        #latestcomment ul > li {
+            background-color: #fff;
+            border-bottom: 1px dashed #ddd;
+            padding:25px;
+            margin:auto;
+            margin-bottom: 10px;
+        }
+        .comarticle {
+            width: 80%;
+            overflow: hidden;
+            text-overflow: ellipsis;
+            white-space: nowrap;
+            font-size: 13px;
+            color: #666;
+        }
+        .comcontent {
+            color: #000;
+            text-indent: 28px;
+        }
+        .comuser {
+            width: 100%;
+            overflow: hidden;
+            text-overflow: ellipsis;
+            white-space: nowrap;
+            font-size: 13px;
+            text-align: right;
+            color: #666;
+        }
+        #friendlink {
+            background-color: #fff;
+            border:1px solid #ddd;
+            box-sizing: border-box;
+        }
+        #friendlink ul {
+            width:100%;
+            padding: 0;
+            margin: 0;
+            list-style: none;
+        }
+        #friendlink ul > li {
+            display: inline-block;
+            background-color: #fff;
+            border: 3px solid #222;
+            border-radius: 8px;
+            color:cornflowerblue;
+            padding:5px;
+            margin:10px;
+        }
+        #friendlink ul > li a {
+            text-decoration: none;
+            cursor: pointer;
+            color:cornflowerblue;
+        }
+
+
+        .footer {
+            display: block;
+            margin-top: 25px;
+            font-size: 15px;
+            color:#fff;
+            background-color: rgb(10, 10, 10);
+            text-align: center;
+            overflow: hidden;
+        }
+    </style>
+
+    <script>
+        window.onload = function(){
+            if(sessionStorage.getItem('username')){
+                document.getElementById("login_register").style.display = "none";
+                document.getElementById("meeting_logout").style.display = "block";
+                document.getElementById("meeting_name").innerHTML = sessionStorage.getItem('username');
+            }else{
+                document.getElementById("meeting_logout").style.display = "none";
+                document.getElementById("login_register").style.display = "block";
+            }
+            document.getElementById("quit").onclick = function(){
+                sessionStorage.clear();    // 清除session
+                location.reload();
+            }
+        };
+    </script>
+</head>
+<body style="display: block;">
+    <header class="blog_header">
+        <div class="top">
+            <div class="top_left">
+                <a href="{% url 'Blog:index' %}" style="color:#000;text-decoration: none;cursor: pointer;"><span>lcy's blog</span></a>
+            </div>
+            <nav class="header_nav">
+                <ul>
+                    <li>
+                        <a href="{% url 'Blog:index' %}" class="nav_active">博客</a>
+                    </li>
+                    <li>
+                        <a href="{% url 'Blog:classes' %}">分类</a>
+                    </li>
+                    <li>
+                        <a href="{% url 'Blog:archive' %}">归档</a>
+                    </li>
+                    <li>
+                        <a href="{% url 'Blog:message' %}">留言</a>
+                    </li>
+                    <li>
+                        <a href="{% url 'Blog:about' %}">关于</a>
+                    </li>
+                    <li style="float: right;font-size: 14px;text-align: center;line-height: 70px;width: 30%;">
+                        <div id="login_register">
+                            <a href="{% url 'Blog:register' %}" style="cursor:pointer;float: right;color: #222;text-decoration: none;">注册</a> 
+                            <span style="float: right;">&nbsp;|&nbsp;</span>  
+                            <a href="{% url 'Blog:login' %}" style="cursor:pointer;float: right;color: #222;text-decoration: none;">登陆</a> 
+                        </div>
+                        <div id="meeting_logout" style="display: none;">
+                            <a style="cursor:pointer;float: right;color: #222;text-decoration: none;" id="quit">注销</a> 
+                            <span style="float: right;">&nbsp;|&nbsp;</span>  
+                            <span style="float: right;">您好，<span id="meeting_name">lcy</span></span>
+                        </div>
+                    </li>
+                </ul>
+            </nav>
+        </div>
+    </header>
+
+    <div class="container">
+        <div class="article">
+            <ul>
+                {% for article in article_list %}
+                <li>
+                    <div class="article_info">
+                        <h4 class="article_title"><a href="{% url 'Blog:detail' article.id %}">{{ article.article_title }}</a></h4>
+                        <p>简介：{{ article.article_simpledesc }}</p>
+                        <a href="{% url 'Blog:detail' article.id %}" class="readmore">Read More>></a>
+                        <ul>
+                            <li><img src="{% static '/Blog/personIcon.png' %}" />{{ article.article_publisher }}
+                            <li><img src="{% static '/Blog/classIcon.png' %}" /><a style="color: #555;cursor: pointer;text-decoration: none;" href="{% url 'Blog:classes' %}#class_{{ article.article_class.id }}">{{ article.article_class }}</a></li>
+                            <li><img src="{% static '/Blog/dateIcon.png' %}" />{{ article.article_pubdate|date:"Y-m-d" }}</li>
+                        </ul>
+                    </div>
+                </li>
+                {% endfor %}
+            </ul>
+            <!-- 分页 -->
+            <ul  class="pagination">
+                {% if article_list.has_previous %}
+                    <li><a href="{{ request.path }}?page={{ article_list.previous_page_number }}">&laquo;</a></li>
+                {% endif %}
+                {% for i in article_list.paginator.page_range %}
+                    {% if i == article_list.number %}
+                        <li class="active"><a href="{{ request.path }}?page={{ i }}">{{ i }}</a></li>
+                    {% else %}
+                        <li><a href="{{ request.path }}?page={{ i }}">{{ i }}</a></li>
+                    {% endif %}
+                {% endfor %}
+                {% if article_list.has_next %}
+                    <li><a href="{{ request.path }}?page={{ article_list.next_page_number }}">&raquo;</a></li>
+                {% endif %}
+            </ul>
+        </div>
+        <div id="aside">
+            <!-- 联系我 -->
+            <div id="contactme">
+                <h4 style="padding-bottom:8px;padding-left:5px;font-size: 18px;color: cornflowerblue;border-bottom: 1px solid #ddd;">
+                    <img width="26px" height="26px" src="{% static 'Blog/contact.png' %}">
+                    &nbsp;联系方式
+                    <small>contact me</small>
+                </h4>
+                <div class="contact">
+                    <div>
+                        <a href="https://github.com/1998Jan28" target="_blank"><img src="{% static 'Blog/github.png' %}" /></a>
+                        <span>Github</span>
+                    </div><div>
+                        <a href="mailto:cs_lcy@whut.edu.cn"><img src="{% static 'Blog/email.png' %}" /></a>
+                        <span>Email</span>
+                    </div><div>
+                        <a href="tencent://AddContact/?fromId=45&fromSubId=1&subcmd=all&uin=951072650&website=www.oicqzone.com"><img src="{% static 'Blog/qq.png' %}" /></a>
+                        <span>QQ</span>
+                    </div><div>
+                        <a href="https://weibo.com/u/5662257126" target="_blank"><img src="{% static 'Blog/weibo.png' %}" /></a>
+                        <span>Weibo</span>
+                    </div>
+                </div>
+            </div>
+            <!-- 最近评论 -->
+            <div id="latestcomment">
+                <h4 style="padding-bottom:8px;padding-left:5px;font-size: 18px;color: cornflowerblue;border-bottom: 1px solid #ddd;">
+                    <img width="26px" height="26px" src="{% static 'Blog/comment.png' %}">
+                     &nbsp;最近评论
+                    <small>latest comment</small>
+                </h4>
+                <ul>
+                    {% for comment in latest_comment_list %}
+                        <li>
+                            <p class="comarticle">
+                                <img width="15px" height="15px" style="display: inline-block;" src="{% static 'Blog/article.png' %}" />
+                                <a href="{% url 'Blog:detail' comment.comment_article.id %}" style="text-decoration: none;color: inherit;cursor: pointer;">{{ comment.comment_article }}</a>
+                            </p>
+                            <p class="comcontent">{{ comment.comment_content }}</p>
+                            <p class="comuser">-- 
+                                <img width="15px" height="15px" style="display: inline-block;" src="{% static 'Blog/personIcon.png' %}" />
+                                {{ comment.comment_user }}
+                            </p>
+                        </li>
+                    {% endfor %}
+                </ul>
+            </div>
+            <!-- 友情链接 -->
+            <div id="friendlink">
+                <h4 style="padding-bottom:8px;padding-left:5px;font-size: 18px;color: cornflowerblue;border-bottom: 1px solid #ddd;">
+                    <img width="26px" height="26px" src="{% static 'Blog/link.png' %}">
+                    &nbsp;友情链接
+                    <small>friend link</small>
+                </h4>
+                <ul>
+                    <li>
+                        <a href="https://darkkris.github.io/#blog" target="_blank">Dark'Kris</a>
+                    </li>
+                    <li>
+                        <a href="https://docs.djangoproject.com/zh-hans/2.0/" target="_blank">Django</a>
+                    </li>
+                    <li>
+                        <a href="https://neutronx.github.io/django-markdownx/" target="_blank">Django MarkdownX</a>
+                    </li>
+                    <li>
+                        <a href="https://github.com/pylixm/django-mdeditor" target="_blank">django-mdeditor</a>
+                    </li>
+                </ul>
+            </div>
+        </div>
+    </div>
+    
+
+    <div class="footer">
+        <p style="margin-bottom: 10px;margin-top:5px;">CopyRight © 2018 lcy's blog  Designed by lcy</p>
+        <p style="margin-bottom: 5px;">Powered by Django</p>
+    </div>
+</body>
+</html>

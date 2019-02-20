@@ -1,0 +1,153 @@
+<!DOCTYPE html>
+{% load static %}
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta http-equiv="X-UA-Compatible" content="ie=edge">
+    <title>lcy's blog</title>
+    <link rel="stylesheet" href="{% static 'Blog/bootstrap/css/bootstrap.css' %}" />
+    <script src="{% static 'Blog/jquery/jquery-3.3.1.js' %}"></script>
+    <style>
+        html {
+            height: 100%;
+        }
+        body {
+            margin: 0;
+            padding:0;
+            display: block;
+            background: url("{% static 'Blog/bg2.jpg' %}") no-repeat;
+            background-size:100% 100%;
+            font-size: 16px;
+            position: relative;
+        }
+        .myform {
+            background-color: rgba(250, 250, 255, 0.7);
+            width:38%;
+            margin:auto;
+            padding-top: 10px;
+            padding-bottom: 10px;
+        }
+        .myform img {
+            width: 20%;
+            height: 20%;
+            margin-top: 20px;
+            margin-bottom: 30px;
+        }
+        #loginform input {
+            border:1px solid #ccc;
+            padding: 7px 0;
+            border-radius: 5px;
+            
+            -webkit-box-shadow: inset 0 1px 1px rgba(0,0,0,.075);
+            box-shadow: inset 0 1px 1px rgba(0,0,0,.075);
+            -webkit-transition: border-color ease-in-out .15s,-webkit-box-shadow ease-in-out .15s;
+            -o-transition: border-color ease-in-out .15s,box-shadow ease-in-out .15s;
+            transition: border-color ease-in-out .15s,box-shadow ease-in-out .15s
+        }
+        #loginform input:focus {
+            border-color:#66afe9;
+            outline: 0;
+
+            -webkit-box-shadow: inset 0 1px 1px rgba(0,0,0,.075),0 0 8px rgba(102,175,233,.6);
+            box-shadow: inset 0 1px 1px rgba(0,0,0,.075),0 0 8px rgba(102,175,233,.6)
+        }
+        #loginbtn {
+            width: 65%;
+            height: 30px;
+            border: none;
+            border-radius: 5px;
+            background-color: #66afe9;
+            color: #fff;
+        }
+        .quicklogin {
+            width: 100%;
+            text-align: center;
+            border-bottom: 1px dashed #eee;
+        }
+        .quicklogin a{
+            cursor: pointer;
+            margin-right: 10px;
+        }
+        .quicklogin img {
+            width: 8%;
+            height: 8%;
+        }
+    </style>
+    <script type="text/javascript">
+        window.onload = function(){
+            //alert(document.referrer);
+            document.getElementById("loginbtn").onclick = function(){
+                /*
+                    /^ 匹配字符串开头
+                    \w+ 匹配一个或多个字母数字下划线
+                    @ 匹配@字符
+                    \. 匹配.字符
+                    $ 匹配字符串结尾
+                    整体看来：以一个或连续多个字母数字下划线开始，接着是@，@后面接着一个或多个字母数字下划线，然后是一个.，
+                    最后再以一个或多个字母数字下划线结尾的字符串
+                */
+                var reg = /^\w+@\w+(\.\w+)+$/;
+                if(document.loginform.email.value == ''){
+                    document.getElementById("tip").innerHTML = "邮箱不能为空！";
+                }
+                else if(document.loginform.password.value == ''){
+                    document.getElementById("tip").innerHTML = "密码不能为空！";
+                }
+                else if(!reg.test(document.loginform.email.value)){            // 正则表达式验证邮箱的格式
+                    document.getElementById("tip").innerHTML = "请输入正确的邮箱格式！";
+                }
+                else
+                {
+                    $.ajax({
+                        type:'POST',
+                        data:{
+                             csrfmiddlewaretoken: '{{ csrf_token }}',    // 加上这句避免POST 403
+                             email: $("#email").val(),
+                             password:$("#password").val()
+                         },
+                        url:"{% url 'Blog:login' %}",
+                        success:function(data){
+                            if(data.msg == 'success'){
+                                sessionStorage.setItem('email', data.email);    // 保存数据到sessionStorage
+                                sessionStorage.setItem('username',data.username);
+                                sessionStorage.setItem('userid',data.userid);
+                                var beforeurlsplit = document.referrer.split('/');
+                                if(beforeurlsplit[beforeurlsplit.length-2] != "register")
+                                    window.location.href = window.history.back();              //"{% url 'Blog:index' %}";
+                                else
+                                    window.location.href = "{% url 'Blog:index' %}";
+                            }
+                            else{
+                                document.getElementById("tip").innerHTML= data.msg;
+                            }
+                        }
+                    });
+                }
+            }
+        };
+    </script>
+</head>
+<body>
+    <div style="width: 1000px;margin: auto;text-align: center;margin-top: 100px;">
+        <div class="myform">
+            <h2>邮箱登陆</h2>
+            <img src="{% static 'Blog/login_register.png' %}" />
+            <form id="loginform" name="loginform" action="{% url 'Blog:login' %}" method="POST">
+                {% csrf_token %}
+                <p>邮箱 ：<input type="email" id="email" name="email" placeholder="email" /></p>
+                <p>密码 ：<input type="password" id="password" name="password" placeholder="password" /></p>
+                <p id="tip" style="color:red;">{{ error }}</p>
+                <button id="loginbtn" type="button">登陆</button>
+                <div class="quicklogin">
+                    <span>快捷登陆：</span>
+                    <a><img src="{% static 'Blog/github.png' %}" /></a>
+                    <a><img src="{% static 'Blog/qq.png' %}" /></a>
+                    <a><img src="{% static 'Blog/weibo.png' %}" /></a>
+                </div>
+            </form>
+            <p style="margin-top: 10px;text-align: right;padding-right: 20px;"><a href="{% url 'Blog:register' %}">注&nbsp;&nbsp;册</a>&nbsp;&nbsp;|&nbsp;&nbsp;<a href="{% url 'Blog:index' %}">主&nbsp;&nbsp;页</a></p>
+        </div>
+    </div>
+</body>
+</html>
